@@ -1,7 +1,6 @@
 let allProducts = [];
-let currentCategory = "all"; // track selected category
+let currentCategory = "all";
 
-// Fetch products
 fetch("https://dummyjson.com/products")
   .then(res => res.json())
   .then(data => {
@@ -11,37 +10,35 @@ fetch("https://dummyjson.com/products")
   })
   .catch(err => console.error(err));
 
-// Populate category dropdown
+
 function loadCategories() {
   let categorySelect = document.getElementById("categorySelect");
   let categoryHTML = '<option value="all">All Categories</option>';
 
-  let seenCategories = {}; // temporary object to track added categories
+  let seenCategories = {};
 
   for (let i in allProducts) {
     let cat = allProducts[i].category;
 
-    if (!seenCategories[cat]) { // only add if not already added
+    if (!seenCategories[cat]) {
       categoryHTML += `<option value="${cat}">${cat}</option>`;
       seenCategories[cat] = true;
     }
   }
 
   categorySelect.innerHTML = categoryHTML;
-  loadBrands(); // initially load all brands
+  loadBrands();
 }
 
-// Load brands dynamically based on selected category
 function loadBrands() {
   let brandSelect = document.getElementById("brandSelect");
   let brandHTML = '<option value="all">All Brands</option>';
 
-  let seenBrands = {}; // temporary object to track added brands
+  let seenBrands = {};
 
   for (let i in allProducts) {
     let product = allProducts[i];
 
-    // Only include brands in selected category (or all if category = all)
     if (currentCategory === "all" || product.category === currentCategory) {
       let brand = product.brand;
       if (!seenBrands[brand]) {
@@ -54,7 +51,6 @@ function loadBrands() {
   brandSelect.innerHTML = brandHTML;
 }
 
-// Display products
 function showProducts(products) {
   let row = document.getElementById("productRow");
   row.innerHTML = "";
@@ -80,15 +76,15 @@ function showProducts(products) {
   }
 }
 
-// When category changes
+
 function categoryChanged() {
   let categorySelect = document.getElementById("categorySelect");
   currentCategory = categorySelect.value;
-  loadBrands();  // Update brands based on selected category
-  filterProducts(); // Show filtered products
+  loadBrands();
+  filterProducts();
 }
 
-// Filter products by category + brand
+
 function filterProducts() {
   let brandSelect = document.getElementById("brandSelect");
   let selectedBrand = brandSelect.value;
@@ -124,10 +120,10 @@ function filterProducts() {
   document.getElementById("productRow").innerHTML = filteredHTML;
 }
 
-// View all products button
+
 function viewAllProducts() {
   currentCategory = "all";
   document.getElementById("categorySelect").value = "all";
-  loadBrands(); // reset brands dropdown
+  loadBrands();
   showProducts(allProducts);
 }
